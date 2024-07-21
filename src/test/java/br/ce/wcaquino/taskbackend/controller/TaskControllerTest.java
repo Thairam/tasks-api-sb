@@ -22,57 +22,57 @@ public class TaskControllerTest {
   private TaskController controller;
 
   @Before
-  public void setup(){
+  public void setup() {
     MockitoAnnotations.initMocks(this);
   }
 
   @Test
-	public void naoDeveSalvarTarefaSemDescricao() {
-		Task todo = new Task();
+  public void naoDeveSalvarTarefaSemDescricao() {
+    Task todo = new Task();
     todo.setDueDate(LocalDate.now());
-		
+
     try {
       controller.save(todo);
       Assert.fail("Não deveria chegar nesse ponto!");
     } catch (ValidationException e) {
       Assert.assertEquals("Fill the task description", e.getMessage());
     }
-	}
+  }
 
   @Test
-	public void naoDeveSalvarTarefaSemData() {
-		Task todo = new Task();
+  public void naoDeveSalvarTarefaSemData() {
+    Task todo = new Task();
     todo.setTask("Descrição");
-		
+
     try {
       controller.save(todo);
       Assert.fail("Não deveria chegar nesse ponto!");
     } catch (ValidationException e) {
       Assert.assertEquals("Fill the due date", e.getMessage());
     }
-	}
+  }
 
   @Test
-	public void naoDeveSalvarTarefaComDataPassada() {
-		Task todo = new Task();
+  public void naoDeveSalvarTarefaComDataPassada() {
+    Task todo = new Task();
     todo.setTask("Descrição");
     todo.setDueDate(LocalDate.of(2010, 01, 01));
-		
+
     try {
       controller.save(todo);
       Assert.fail("Não deveria chegar nesse ponto!");
     } catch (ValidationException e) {
       Assert.assertEquals("Due date must not be in past", e.getMessage());
     }
-	}
+  }
 
   @Test
-	public void deveSalvarTarefaComSucesso() throws ValidationException {
-		Task todo = new Task();
+  public void deveSalvarTarefaComSucesso() throws ValidationException {
+    Task todo = new Task();
     todo.setTask("Descrição");
     todo.setDueDate(LocalDate.now());
     controller.save(todo);
 
     Mockito.verify(taskRepo).save(todo);
-	}
+  }
 }
