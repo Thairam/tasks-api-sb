@@ -42,5 +42,14 @@ pipeline {
         }
       }
     }
+    stage ('Deploy Frontend') {
+      steps {
+        dir('frontend') {
+          git credentialsId: 'Github_login', url: 'https://github.com/Thairam/tasks-site'
+          bat 'mvn clean package'
+          deploy adapters: [tomcat8(credentialsId: 'Tomcat_Login', path: '', url: 'http://localhost:8001/')], contextPath: 'tasks', war: 'target/tasks.war'
+        }        
+      }
+    }
   }
 }
